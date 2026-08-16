@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FFD100">
+<title>Saan Galing? — UNESCO Youth Hackathon 2026</title>
+<meta name="description" content="A game about the decision that actually spreads misinformation: whether to pass it on. UNESCO Youth Hackathon 2026, Philippines.">
+<style>
+:root{
+  --ground:#FFD100; --surface:#fff; --ink:#000; --muted:#5e5e5e;
+  --cyan:#22d3ee; --pink:#ff90e8; --tray:#ededed;
+  --bd:3px; --sh:6px;
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0 !important}
+body{
+  margin:0;background:var(--ground);
+  background-image:linear-gradient(90deg,rgba(0,0,0,.06) 1px,transparent 1px),
+                   linear-gradient(rgba(0,0,0,.06) 1px,transparent 1px);
+  background-size:48px 48px;
+  color:var(--ink);
+  font-family:'Unbounded','Archivo Black','Arial Black',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-weight:500;font-size:17px;line-height:1.55;
+}
+.wrap{max-width:940px;margin:0 auto;padding:26px 20px 70px}
+h1{font-size:clamp(38px,8vw,74px);font-weight:900;line-height:.9;letter-spacing:-.045em;
+   text-transform:uppercase;margin:0 0 10px}
+h2{font-size:clamp(24px,4vw,34px);font-weight:900;line-height:1;letter-spacing:-.03em;
+   text-transform:uppercase;margin:0 0 16px}
+h3{font-size:16px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
+p{margin:0 0 14px}
+.sub{font-size:clamp(17px,2.4vw,21px);font-weight:700;margin:0 0 4px}
+.mut{color:var(--muted)}
+.sm{font-size:15px;line-height:1.55}
+
+.nb{background:var(--surface);border:var(--bd) solid var(--ink);
+    box-shadow:var(--sh) var(--sh) 0 0 var(--ink);padding:24px}
+.nb.cy{background:var(--cyan)} .nb.pk{background:var(--pink)}
+.nb.bk{background:var(--ink);color:var(--surface)}
+.nb+.nb,section{margin-top:26px}
+section{scroll-margin-top:20px}
+
+.tape{display:inline-block;background:var(--ink);color:var(--ground);
+  font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;
+  padding:6px 12px;transform:rotate(-2deg);border:var(--bd) solid var(--ink);margin-bottom:14px}
+.tape.cy{background:var(--cyan);color:var(--ink)}
+
+/* ---------- hero video: first thing, unmissable ---------- */
+.vidbox{border:var(--bd) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 0 var(--ink);
+        background:var(--ink);position:relative;padding-top:56.25%;overflow:hidden}
+.vidbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vidwait{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+         background:var(--ink);color:var(--ground);padding:24px;
+         font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;line-height:1.7}
+
+a.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-size:15px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;
+  padding:15px 22px;background:var(--surface);color:var(--ink);text-decoration:none;
+  border:var(--bd) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 0 var(--ink);
+  transition:transform .06s linear,box-shadow .06s linear,background .06s linear}
+a.btn:hover{background:var(--ink);color:var(--surface)}
+a.btn:active{transform:translate(var(--sh),var(--sh));box-shadow:0 0 0 0 var(--ink)}
+a.btn.cy{background:var(--cyan)} a.btn.cy:hover{background:var(--ink);color:var(--cyan)}
+.btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+
+.grid{display:grid;gap:20px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:820px){.g3,.g2{grid-template-columns:1fr}}
+
+.lvl{display:flex;gap:14px;align-items:flex-start}
+.lvl b.n{flex:0 0 auto;width:40px;height:40px;display:grid;place-items:center;
+  background:var(--ink);color:var(--ground);font-size:19px;font-weight:900;
+  border:var(--bd) solid var(--ink)}
+
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:820px){.shots{grid-template-columns:1fr}}
+.shots figure{margin:0}
+.shots img{width:100%;display:block;border:var(--bd) solid var(--ink);
+           box-shadow:var(--sh) var(--sh) 0 0 var(--ink);background:var(--surface)}
+.shots figcaption{font-size:13px;font-weight:900;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-top:12px}
+
+.playwrap{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.frame{flex:0 0 auto;width:380px;max-width:100%;height:676px;
+       border:var(--bd) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 0 var(--ink);background:#000}
+.frame iframe{width:100%;height:100%;border:0;display:block}
+.playnote{flex:1 1 260px;min-width:250px}
+
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+th,td{text-align:left;padding:11px 12px;border:var(--bd) solid var(--ink);vertical-align:top}
+th{background:var(--ink);color:var(--ground);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.tw{overflow-x:auto}
+
+ul.clean{list-style:none;margin:0;padding:0}
+ul.clean li{position:relative;padding-left:22px;margin-bottom:10px}
+ul.clean li::before{content:'';position:absolute;left:0;top:.55em;width:9px;height:9px;background:var(--ink)}
+
+footer{margin-top:34px;font-size:14px;font-weight:900;letter-spacing:.08em;
+       text-transform:uppercase;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="tape">UNESCO Youth Hackathon 2026 · Philippines</span>
+    <h1>Saan Galing?</h1>
+    <p class="sub">"Where's it from?"</p>
+    <p class="sm mut" style="max-width:60ch">A game about the decision that actually spreads misinformation: whether to pass it on.</p>
+  </header>
+
+  <!-- ============ THE VIDEO. FIRST THING. ============ -->
+  <section>
+    <div class="vidbox" id="vidbox"></div>
+  </section>
+
+  <section class="nb cy">
+    <h2>The pitch, in one paragraph</h2>
+    <p style="margin:0">You run your section's group chat. Forty-two classmates read what you post. Sources reach you carrying real documents — page transparency records, official memoranda, reverse image searches — and reading them is free and unlimited, checked against a rulebook. <strong>The score counts both ways.</strong> Letting a lie through costs your classmates. So does holding back something true, because refusing to believe anything is its own failure, and it is the one media literacy education produces by accident.</p>
+  </section>
+
+  <!-- ============ PLAY IT ============ -->
+  <section class="nb">
+    <span class="tape cy">Playable right here</span>
+    <h2>Play it</h2>
+    <div class="playwrap">
+      <div class="frame"><iframe src="play.html" title="Saan Galing? — playable prototype" loading="lazy"></iframe></div>
+      <div class="playnote">
+        <p class="sm">The full prototype: three levels, nineteen sources, thirty-two documents, the rulebook and the scoring.</p>
+        <p class="sm">It is a <strong>single HTML file</strong> with no dependencies and no backend. It runs offline in any mobile browser and has been built and installed as a 4&nbsp;MB Android application on a physical handset.</p>
+        <div class="btns">
+          <a class="btn cy" href="play.html" target="_blank" rel="noopener">Open fullscreen ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LEVELS ============ -->
+  <section class="nb">
+    <h2>Three levels, three skills</h2>
+    <p class="sm mut">Each level carries its own rulebook chapter, so levels work as curriculum units rather than extra content.</p>
+    <div class="grid g3" style="margin-top:20px">
+      <div class="lvl"><b class="n">1</b><div>
+        <h3>Walang pasok</h3>
+        <p class="sm" style="margin:0">Fake class suspension announcements. Teaches who is actually authorised to declare one, and what a genuine advisory contains.</p></div></div>
+      <div class="lvl"><b class="n">2</b><div>
+        <h3>Ang ayuda</h3>
+        <p class="sm" style="margin:0">Cash aid and scholarship scams. Teaches official domains, forged memoranda, and the processing fee that gives it away.</p></div></div>
+      <div class="lvl"><b class="n">3</b><div>
+        <h3>Ang nawawala</h3>
+        <p class="sm" style="margin:0">Recycled appeals and panic posts. Teaches reverse image search — where a photo came from, and <em>when</em>.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ============ SCREENS ============ -->
+  <section>
+    <h2>On a phone</h2>
+    <div class="shots">
+      <figure><img src="shots/menu.png" alt="Level select screen"><figcaption>Level select</figcaption></figure>
+      <figure><img src="shots/source.png" alt="A source with attached documents"><figcaption>A source, with its documents</figcaption></figure>
+      <figure><img src="shots/doc.png" alt="An open document record"><figcaption>A document — facts, no conclusions</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- ============ WHY ============ -->
+  <section class="nb pk">
+    <h2>Why this, and why here</h2>
+    <ul class="clean">
+      <li><strong>The problem is documented and escalating.</strong> DepEd has repeatedly debunked fake class suspension announcements, which it notes are now "usually made using artificial intelligence tools." A page operating as "Walang Pasok Advisory" was created in 2023 under a different name, renamed in 2024 to look official, and carries roughly 55,000 followers.</li>
+      <li><strong>There is already a mandated course waiting for it.</strong> Media and Information Literacy is a core senior high subject in the Philippines — one semester, 80 hours. We are not asking schools to make room.</li>
+      <li><strong>It can be measured with data schools already keep.</strong> When a fake suspension circulates, absences spike. Attendance is already recorded, so behaviour change is measurable at zero instrumentation cost.</li>
+      <li><strong>Documents state facts, never conclusions.</strong> The transparency record says when a page was renamed. It does not say the page is deceptive. The player makes that connection, against the rulebook — which is where the transferable skill lives.</li>
+    </ul>
+  </section>
+
+  <!-- ============ TEAM ============ -->
+  <section class="nb">
+    <h2>Team Saan Galing?</h2>
+    <p class="sm mut">Computer Science students, Angeles City, Pampanga.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Name</th><th>Age</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td>Jose Gian Tubera</td><td>21</td><td>Team lead — game design, scenario research, rulebook and document writing</td></tr>
+          <tr><td>Allein Edward Miranda</td><td>21</td><td>Front-end — interface, design system, mobile layout</td></tr>
+          <tr><td>Rastafari Khaliel Sarzona</td><td>21</td><td>Back-end — game state architecture, level data, Android build</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>Saan Galing? · UNESCO Youth Hackathon 2026 · "Play Your Part"</footer>
+</div>
+
+<script>
+/* ============================================================
+   PASTE YOUR YOUTUBE VIDEO ID BELOW.
+   From https://www.youtube.com/watch?v=dQw4w9WgXcQ
+   the ID is the part after "v=" — here, dQw4w9WgXcQ
+   ============================================================ */
+const YOUTUBE_ID = "";
+
+(function(){
+  const box = document.getElementById('vidbox');
+  if (YOUTUBE_ID && YOUTUBE_ID.trim()){
+    const f = document.createElement('iframe');
+    f.src = "https://www.youtube.com/embed/" + YOUTUBE_ID.trim();
+    f.title = "Saan Galing? — 3-minute pitch";
+    f.allow = "accelerometer; clipboard-write; encrypted-media; picture-in-picture";
+    f.allowFullscreen = true;
+    box.appendChild(f);
+  } else {
+    box.innerHTML = '<div class="vidwait">Pitch video<br>— paste your YouTube ID in index.html —</div>';
+  }
+})();
+</script>
+</body>
+</html>

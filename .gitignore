@@ -7,12 +7,13 @@ android-app/android/local.properties
 android-app/android/capacitor-cordova-android-plugins/
 
 # Working material, not for publication
-a.txt
-image.png
-image copy*.png
-screenshots/
-walang-pasok.html
-video-script.md
-index.html
-DESIGN.md
-site/
+/a.txt
+/image.png
+/image copy*.png
+/screenshots/
+/walang-pasok.html
+/video-script.md
+/index.html
+/DESIGN.md
+/site/
+Saan-Galing-Proposal.pdf

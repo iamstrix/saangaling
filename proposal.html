@@ -13,12 +13,12 @@
 body{
   margin:0 auto;max-width:780px;padding:44px 40px 80px;
   background:#fff;color:var(--ink);
-  font:16px/1.6 "Georgia","Iowan Old Style",serif;
+  font:16px/1.55 "Times New Roman", Times, serif;
   -webkit-font-smoothing:antialiased;
 }
-h1,h2,h3,.meta,table,.flag,.note{font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3,.meta,table,.flag,.note{font-family:"Times New Roman", Times, serif}
 h1{font-size:31px;line-height:1.15;margin:0 0 6px;letter-spacing:-.02em}
-.tag{font-size:15px;color:var(--soft);margin:0 0 22px;font-family:"Inter",system-ui,sans-serif}
+.tag{font-size:15px;color:var(--soft);margin:0 0 22px}
 h2{font-size:16px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);
    margin:34px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--line)}
 h3{font-size:15.5px;margin:20px 0 7px;letter-spacing:-.01em}
@@ -39,9 +39,9 @@ th{background:var(--wash);font-weight:700;font-size:12.5px;letter-spacing:.05em;
 .note{background:var(--wash);border-left:3px solid var(--accent);padding:13px 16px;
       margin:16px 0;font-size:14.5px;border-radius:0 5px 5px 0}
 .lead{font-size:17.5px;line-height:1.55;color:var(--ink)}
-.stat{font-size:15px;color:var(--soft);font-family:"Inter",system-ui,sans-serif}
+.stat{font-size:15px;color:var(--soft)}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);
-       font-size:13px;color:var(--soft);font-family:"Inter",system-ui,sans-serif}
+       font-size:13px;color:var(--soft)}
 a{color:var(--accent)}
 @media print{
   body{padding:0;max-width:none;font-size:11.5pt}
@@ -64,7 +64,7 @@ a{color:var(--accent)}
   <div><b>Format</b><span>Game (browser-based, with printable offline version)</span></div>
   <div><b>Team</b><span>Saan Galing?</span></div>
   <div><b>Country</b><span>Philippines</span></div>
-  <div><b>Playable demo</b><span>Demonstrated in the pitch video. Single-file build and Android APK available on request. <span class="flag">[optional: paste public URL]</span></span></div>
+  <div><b>Playable demo</b><span><a href="https://iamstrix.github.io/saangaling/">https://iamstrix.github.io/saangaling/</a></span></div>
 </div>
 
 <h2>1 · Team</h2>
@@ -149,7 +149,7 @@ a{color:var(--accent)}
 <p>Each level carries its own rulebook chapter, so the levels function as curriculum units rather than additional content. Levels are defined as data, not code: adding a fourth is adding a data object, and translating the game is a translation task rather than a development one.</p>
 
 <h3>Prototype status</h3>
-<p>A complete, playable prototype exists: three levels, nineteen sources, thirty-two documents, the full rulebook, scoring and consequences. It is a single HTML file with no dependencies and no backend, it runs offline in any mobile browser, and and it has also been built and installed as a 4&nbsp;MB Android application on a physical handset. The full loop is demonstrated in the pitch video. <span class="flag">[optional: paste public URL]</span></p>
+<p>A complete, playable prototype exists: three levels, nineteen sources, thirty-two documents, the full rulebook, scoring and consequences. It is a single HTML file with no dependencies and no backend, it runs offline in any mobile browser, and and it has also been built and installed as a 4&nbsp;MB Android application on a physical handset. It is playable in a browser at <a href="https://iamstrix.github.io/saangaling/">https://iamstrix.github.io/saangaling/</a>, and the full loop is also demonstrated in the pitch video.</p>
 
 <h2>6 · Sustainability</h2>
 
@@ -200,11 +200,6 @@ a{color:var(--accent)}
 <p><strong>MIL competencies addressed:</strong> locating and identifying authoritative sources; evaluating a claim against a source under time constraint; understanding how social trust shapes credibility independently of evidence; and communicating verified information to others - the "create and disseminate" component of MIL that detection-focused material routinely omits.</p>
 
 <p><strong>SDG 4.</strong> The measurable outcome of this project is school attendance. It addresses misinformation specifically at the point where it removes children from classrooms.</p>
-
-<footer>
-  <p><strong>Before you export:</strong> replace every highlighted placeholder, delete this footer, check the file is under 10 MB, and confirm the demo URL opens in a private browsing window.</p>
-  <p>Sources for all figures cited: UNESCO Youth Hackathon 2026 call and Global MIL Week 2026 (#WeAllPlayAPart) campaign figures; DepEd public advisories on AI-generated class suspension announcements as reported by the Philippine Daily Inquirer and GMA News; MindaNews fact-check of the "Walang Pasok Advisory" page (March 2026); DepEd Media and Information Literacy Curriculum Guide, senior high school core subject.</p>
-</footer>
 
 </body>
 </html>
