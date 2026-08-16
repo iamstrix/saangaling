@@ -38,8 +38,7 @@ Designed to fit the mandated senior high Media and Information Literacy subject
 
 | Path | What |
 |---|---|
-| `docs/` | The published site (GitHub Pages) |
-| `docs/play.html` | The game — one HTML file, no dependencies, no backend, runs offline |
+| `play.html` | The game — one HTML file, no dependencies, no backend, runs offline |
 | `android-app/` | Capacitor wrapper for the Android build |
 
 ## Team

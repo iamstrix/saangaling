@@ -1,5 +1,6 @@
 # Android build output and dependencies
 android-app/node_modules/
+android-app/www/
 android-app/android/build/
 android-app/android/app/build/
 android-app/android/.gradle/
@@ -13,9 +14,8 @@ android-app/android/capacitor-cordova-android-plugins/
 /screenshots/
 /walang-pasok.html
 /video-script.md
-/index.html
+/research-brief.html
 /DESIGN.md
 /proposal.html
 /gatekeeper.html
-/site/
 Saan-Galing-Proposal.pdf

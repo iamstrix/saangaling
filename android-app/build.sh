@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Rebuild the Android debug APK after editing docs/play.html.
+# Rebuild the Android debug APK after editing play.html.
 set -e
 HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE"
@@ -8,7 +8,7 @@ cd "$HERE"
 export JAVA_HOME="/c/Program Files/Android/Android Studio/jbr"
 export ANDROID_HOME="C:/Users/Jose/AppData/Local/Android/Sdk"
 
-cp ../docs/play.html www/index.html
+cp ../play.html www/index.html
 npx cap sync android
 cd android
 ./gradlew assembleDebug --no-daemon
