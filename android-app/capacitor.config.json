@@ -1,0 +1,7 @@
+{
+  "appId": "ph.saangaling.app",
+  "appName": "Saan Galing?",
+  "webDir": "www",
+  "server": { "androidScheme": "https" },
+  "android": { "backgroundColor": "#FFD100" }
+}

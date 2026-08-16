@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<title>SAAN GALING? — WHERE'S IT FROM?</title>
+<style>
+/* ============================================================
+   NEOBRUTALISM — Concept A, Series I
+   Hard black outlines, zero-blur offset shadows, radius 0,
+   and the press-collapse that is the whole personality.
+
+   Built phone-first: full-bleed with safe-area insets on a
+   handset, framed at 9:16 on a desktop where full-bleed would
+   look wrong.
+   ============================================================ */
+
+:root{
+  --ground:#FFD100;
+  --surface:#fff;
+  --tray:#ededed;
+  --ink:#000;
+  --muted:#5e5e5e;
+  --cyan:#22d3ee;
+  --pink:#ff90e8;
+  /* 3px, not 2.5 — browsers snap 2.5px down to 1.5px at non-integer
+     device pixel ratios, and a thin outline kills the style */
+  --bd:3px;
+  --sh:4px;
+  --tap:48px;           /* Android minimum touch target */
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0 !important}
+/* game hygiene: no tap flash, no text selection, no double-tap zoom */
+*{-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{
+  margin:0;
+  background-color:var(--ground);
+  background-image:
+    linear-gradient(90deg,rgba(0,0,0,.07) 1px,transparent 1px),
+    linear-gradient(rgba(0,0,0,.07) 1px,transparent 1px);
+  background-size:44px 44px;
+  color:var(--ink);
+  font-family:'Unbounded','Archivo Black','Arial Black',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-weight:500;font-size:16px;line-height:1.4;
+  -webkit-user-select:none;user-select:none;
+  touch-action:manipulation;
+}
+
+/* ---------- the stage ----------
+   Phone: fills the viewport, insets for status bar and nav pill.
+   Desktop: a framed 9:16 slab, because full-bleed on a monitor
+   is not what this game is. */
+/* Edge to edge. The stage takes the entire screen with no padding —
+   the safe-area insets move onto the HUD and the footer instead, so the
+   black bar bleeds under the status bar while its text stays clear of it. */
+.stage{
+  position:fixed;inset:0;
+  background:var(--surface);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+@media (min-width:560px) and (min-height:640px){
+  body{display:grid;place-items:center;padding:16px}
+  .stage{
+    position:relative;inset:auto;
+    width:min(430px,94vw);aspect-ratio:9/16;max-height:min(96vh,860px);
+    border:var(--bd) solid var(--ink);box-shadow:10px 10px 0 0 var(--ink);
+    padding:0;
+  }
+}
+
+/* ---------- HUD ---------- */
+.hud{
+  flex:0 0 auto;background:var(--ink);color:var(--ground);
+  padding:calc(11px + var(--safe-t)) 14px 11px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
+}
+.hud .r{display:flex;gap:7px;align-items:center}
+.pipbox{display:flex;gap:3px}
+.pip{width:9px;height:14px;background:var(--ground);border:2px solid var(--ground)}
+.pip.off{background:transparent}
+
+/* round progress — 7 hard segments, no easing */
+.track{flex:0 0 auto;display:flex;gap:3px;padding:0 0 0 0;background:var(--ink)}
+.track i{flex:1;height:6px;background:#454545}
+.track i.done{background:var(--ground)}
+.track i.now{background:var(--cyan)}
+
+.subhud{
+  flex:0 0 auto;border-bottom:var(--bd) solid var(--ink);background:var(--cyan);
+  display:flex;align-items:stretch;
+  font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+}
+.subhud span{padding:10px 14px;flex:1;display:flex;align-items:center}
+.rulebtn{
+  font-family:inherit;font-size:11px;font-weight:900;letter-spacing:.12em;
+  text-transform:uppercase;background:var(--ground);color:var(--ink);
+  border:none;border-left:var(--bd) solid var(--ink);
+  padding:0 16px;min-height:var(--tap);cursor:pointer;
+  display:flex;align-items:center;gap:7px;
+  transition:background .06s linear,color .06s linear;
+}
+.rulebtn:active{background:var(--ink);color:var(--ground)}
+@media (hover:hover){ .rulebtn:hover{background:var(--ink);color:var(--ground)} }
+
+.view{flex:1 1 auto;padding:14px;overflow-y:auto;display:flex;flex-direction:column;
+      overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.view::-webkit-scrollbar{width:8px}
+.view::-webkit-scrollbar-track{background:var(--tray)}
+.view::-webkit-scrollbar-thumb{background:#000}
+
+h1{font-size:30px;font-weight:900;line-height:.94;letter-spacing:-.04em;text-transform:uppercase;margin:0 0 10px}
+h2{font-size:19px;font-weight:900;line-height:1;letter-spacing:-.025em;text-transform:uppercase;margin:0 0 8px}
+h3{font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px}
+p{margin:0 0 10px}
+.lbl{font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.sm{font-size:14px;line-height:1.45}
+
+.nb{background:var(--surface);border:var(--bd) solid var(--ink);
+    box-shadow:var(--sh) var(--sh) 0 0 var(--ink);padding:13px}
+.nb.cy{background:var(--cyan)} .nb.pk{background:var(--pink)}
+.nb.yl{background:var(--ground)} .nb.bk{background:var(--ink);color:var(--surface)}
+.nb+.nb{margin-top:13px}
+
+.tape{
+  display:inline-block;background:var(--ink);color:var(--ground);
+  font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;
+  padding:5px 10px;transform:rotate(-2deg);border:var(--bd) solid var(--ink);margin-bottom:10px
+}
+.tape.cy{background:var(--cyan);color:var(--ink)}
+.tape.pk{background:var(--pink);color:var(--ink)}
+.tape.r{transform:rotate(1.5deg)}
+
+.btn{
+  display:flex;align-items:center;justify-content:center;width:100%;
+  font-family:inherit;min-height:var(--tap);
+  font-size:14px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;
+  padding:12px 14px;background:var(--surface);color:var(--ink);
+  border:var(--bd) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 0 var(--ink);
+  cursor:pointer;text-align:center;
+  transition:transform .06s linear,box-shadow .06s linear,background .06s linear;
+}
+.btn:active:not(:disabled){transform:translate(var(--sh),var(--sh));box-shadow:0 0 0 0 var(--ink)}
+.btn:disabled{opacity:.42;cursor:not-allowed;box-shadow:2px 2px 0 0 var(--ink)}
+.btn.cy{background:var(--cyan)}
+.btn.pk{background:var(--pink)}
+/* hover only where a pointer exists — on touch it latches after a tap */
+@media (hover:hover){
+  .btn:hover:not(:disabled){background:var(--ink);color:var(--surface)}
+  .btn.cy:hover:not(:disabled){background:var(--ink);color:var(--cyan)}
+  .btn.pk:hover:not(:disabled){background:var(--ink);color:var(--pink)}
+}
+.btn+.btn{margin-top:10px}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btnrow .btn+.btn{margin-top:0}
+.foot{flex:0 0 auto;padding:12px 14px calc(12px + var(--safe-b));
+      border-top:var(--bd) solid var(--ink);background:var(--tray)}
+
+/* ---------- source ---------- */
+.who{display:flex;gap:11px;align-items:flex-start;margin-bottom:11px;flex:0 0 auto}
+.pfp{width:46px;height:46px;flex:0 0 auto;border:var(--bd) solid var(--ink);
+     box-shadow:3px 3px 0 0 var(--ink);display:grid;place-items:center;
+     font-size:20px;background:var(--ground)}
+.who .nm{font-size:16px;font-weight:900;line-height:1.08;letter-spacing:-.015em}
+.who .rel{font-size:11px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;
+          color:var(--muted);margin-top:4px}
+.claim{border:var(--bd) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 0 var(--ink);
+       padding:12px;background:var(--surface);font-size:14.5px;line-height:1.45;flex:0 0 auto}
+.claim .fwd{font-size:10.5px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;
+            color:var(--muted);display:block;margin-bottom:7px}
+.poster{background:var(--pink);border:var(--bd) solid var(--ink);padding:14px 10px;
+        text-align:center;font-weight:900;font-size:14.5px;line-height:1.2;text-transform:uppercase}
+.poster small{display:block;font-size:10.5px;letter-spacing:.1em;margin-top:7px;font-weight:900}
+
+/* the tray — documents live in a bordered inset so the empty space
+   below them reads as an open folder rather than a broken layout */
+.tray{
+  flex:1 1 auto;margin-top:13px;display:flex;flex-direction:column;min-height:120px;
+  border:var(--bd) solid var(--ink);background:var(--tray);
+  box-shadow:var(--sh) var(--sh) 0 0 var(--ink);
+}
+.trayhd{
+  flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:9px 11px;border-bottom:var(--bd) solid var(--ink);background:var(--ink);color:var(--ground);
+  font-size:10.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
+}
+.traybody{flex:1 1 auto;overflow-y:auto;padding:11px;overscroll-behavior:contain}
+.traybody::-webkit-scrollbar{width:7px}
+.traybody::-webkit-scrollbar-thumb{background:#000}
+.trayempty{
+  flex:1 1 auto;display:grid;place-items:center;text-align:center;padding:16px;
+  font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+}
+
+.doc{
+  width:100%;text-align:left;font-family:inherit;display:flex;
+  justify-content:space-between;align-items:center;gap:10px;min-height:var(--tap);
+  font-size:13px;font-weight:900;letter-spacing:.02em;padding:11px 12px;
+  background:var(--surface);color:var(--ink);
+  border:var(--bd) solid var(--ink);box-shadow:3px 3px 0 0 var(--ink);cursor:pointer;
+  transition:transform .06s linear,box-shadow .06s linear,background .06s linear;
+}
+@media (hover:hover){ .doc:hover{background:var(--cyan)} }
+.doc:active{transform:translate(3px,3px);box-shadow:0 0 0 0 var(--ink)}
+.doc.open{background:var(--ground)}
+.doc .cost{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;
+           color:var(--muted);white-space:nowrap}
+.doc.open .cost{color:var(--ink)}
+.doc+.doc{margin-top:10px}
+
+/* ---------- document sheet ---------- */
+.sheet{position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:20;
+       display:flex;align-items:center;justify-content:center;padding:16px;
+       padding-top:calc(16px + var(--safe-t));padding-bottom:calc(16px + var(--safe-b))}
+.sheet[hidden]{display:none}
+.sheetcard{
+  width:100%;max-height:100%;background:var(--surface);
+  border:var(--bd) solid var(--ink);box-shadow:9px 9px 0 0 var(--ink);
+  transform:rotate(-1deg);display:flex;flex-direction:column;overflow:hidden;
+}
+.sheethd{padding:13px 14px 0;flex:0 0 auto}
+.sheetbody{padding:0 14px 14px;overflow-y:auto;flex:1 1 auto;overscroll-behavior:contain}
+.sheetbody::-webkit-scrollbar{width:8px}
+.sheetbody::-webkit-scrollbar-thumb{background:#000}
+.sheetft{padding:12px 14px;border-top:var(--bd) solid var(--ink);background:var(--tray);flex:0 0 auto}
+.rec{border:var(--bd) solid var(--ink);background:#f7f7f7;padding:11px;font-size:13px;
+     font-family:ui-monospace,'Cascadia Mono','Consolas',monospace;line-height:1.6;
+     -webkit-user-select:text;user-select:text}
+.rec div{display:flex;gap:9px;justify-content:space-between;padding:2px 0}
+.rec div span:first-child{color:var(--muted);flex:0 0 auto}
+.rec div span:last-child{text-align:right;font-weight:700}
+.rec+.rec{margin-top:10px}
+.note{font-size:13.5px;line-height:1.5;margin-top:10px;
+      border-left:var(--bd) solid var(--ink);padding-left:10px}
+.rulesec{border:var(--bd) solid var(--ink);padding:11px;margin-top:11px;background:var(--ground)}
+.rulesec h3{margin-bottom:6px}
+.rulesec ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5}
+.rulesec li{margin-bottom:4px}
+
+/* ---------- results ---------- */
+.score{display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+       border-bottom:var(--bd) solid var(--ink);padding:9px 0;font-size:13px;font-weight:900;
+       letter-spacing:.03em;text-transform:uppercase}
+.score:last-child{border-bottom:none}
+.score b{font-size:19px;font-weight:900}
+.score.bad{color:#c1121f}
+.verdictbar{border:var(--bd) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 0 var(--ink);
+            padding:14px;text-align:center;font-size:16px;font-weight:900;
+            letter-spacing:-.01em;text-transform:uppercase;line-height:1.15;flex:0 0 auto}
+.debrief{border:var(--bd) solid var(--ink);box-shadow:3px 3px 0 0 var(--ink);
+         padding:11px;margin-top:10px;font-size:13.5px;line-height:1.45;background:var(--surface)}
+.debrief b{display:block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.stamp{position:absolute;top:42%;left:50%;font-size:min(11vw,38px);font-weight:900;
+       letter-spacing:.05em;text-transform:uppercase;border:5px solid;padding:9px 20px;
+       transform:translate(-50%,-50%) rotate(-13deg);pointer-events:none;z-index:30;
+       background:rgba(255,255,255,.92);animation:slam .18s linear}
+.stamp.ok{color:#0a8f3c;border-color:#0a8f3c}
+.stamp.no{color:#c1121f;border-color:#c1121f}
+@keyframes slam{from{transform:translate(-50%,-50%) rotate(-13deg) scale(2.4);opacity:0}
+                to{transform:translate(-50%,-50%) rotate(-13deg) scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+
+/* ---------- level select ---------- */
+.btn.lvl{display:flex;align-items:center;gap:12px;text-align:left;justify-content:flex-start;
+         padding:13px;min-height:66px;margin-top:12px}
+.lvl-n{flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;
+       background:var(--ink);color:var(--ground);font-size:16px;font-weight:900;
+       border:var(--bd) solid var(--ink)}
+.lvl-t{flex:1 1 auto;display:flex;flex-direction:column;gap:3px;min-width:0}
+.lvl-t b{font-size:15px;font-weight:900;letter-spacing:-.01em;text-transform:uppercase}
+.lvl-t i{font-style:normal;font-size:11px;font-weight:900;letter-spacing:.1em;
+         text-transform:uppercase;color:var(--muted)}
+.btn.lvl:hover .lvl-t i,.btn.lvl:active .lvl-t i{color:inherit}
+.lvl-s{flex:0 0 auto;font-size:12px;font-weight:900;letter-spacing:.06em;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<main class="stage" id="stage">
+  <div class="hud">
+    <span id="hud-l">GRADE 11 · SECTION CHAT</span>
+    <span class="r"><span>TRUST</span><span class="pipbox" id="pips"></span></span>
+  </div>
+  <div class="track" id="track"></div>
+  <div class="subhud">
+    <span id="sub-l">BAGYONG DANTE</span>
+    <button class="rulebtn" id="rulebtn">📕 <span>Rulebook</span></button>
+  </div>
+  <div class="view" id="view"></div>
+  <div class="foot" id="foot"></div>
+
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheetcard">
+      <div class="sheethd"><span class="tape" id="sheet-tag">DOC</span><h2 id="sheet-title"></h2></div>
+      <div class="sheetbody" id="sheet-body"></div>
+      <div class="sheetft"><button class="btn" id="sheet-close">Put it down</button></div>
+    </div>
+  </div>
+</main>
+
+<script>
+'use strict';
+
+
+const CONFIG = { classmates:42, credStart:3, credMax:5 };
+
+/* ---------- the rulebook: free, always available ---------- */
+const RULEBOOK = [
+  { h:'Who can suspend classes?', li:[
+    'City / municipality — the <b>Mayor or LGU</b>.',
+    'Province-wide — the <b>Governor</b>.',
+    'Nationwide — <b>DepEd</b>. Rare. It usually defers to LGUs.',
+    'A local suspension attributed to DepEd is the wrong office.'
+  ]},
+  { h:'What PAGASA does', li:[
+    'Issues <b>weather signals</b> and numbered bulletins.',
+    'Does <b>not</b> suspend classes. Ever.',
+    'Signal No. 1 = winds 39–61 km/h. Classes are not automatically cancelled.'
+  ]},
+  { h:'What a real advisory contains', li:[
+    'An <b>issuing office</b> named.',
+    'A <b>reference number</b>.',
+    'A <b>date and time</b> of issue.',
+    'A signature or named official.',
+    'Explicit <b>scope</b> — which levels, which areas.'
+  ]},
+  { h:'Checking a page', li:[
+    'Page transparency shows <b>creation date</b> and <b>previous names</b>.',
+    'A page that changed its name is not automatically fake — but ask why.',
+    'A verification badge is issued by the platform, not claimed by the page.',
+    'Follower count is not credibility.'
+  ]},
+  { h:'Images and video', li:[
+    'Heavy re-compression means it has been reposted many times, far from its source.',
+    'A <b>re-upload</b> is not a <b>share</b> — a share keeps the original author attached.',
+    'Check whether the clip exists on the official page it claims to come from.',
+    'Lip-sync drift and missing room tone are signs of synthetic video.'
+  ]}
+];
+
+/* ---------- ground truth ----------
+   Senior high is NOT suspended. Signal No. 1.
+   Elementary + JHS suspended in Barangay San Roque only.        */
+
+const SOURCES = [
+  {
+    id:'pagasa', icon:'🛰', name:'PAGASA Bulletin #14', rel:'Official · weather bureau',
+    kind:'reliable', correct:'accept',
+    claim:'Tropical Depression Dante. <b>Signal No. 1</b> over the province. 60% chance of intensification within 24 hours.',
+    docs:[
+      { t:'Bulletin #14, full text', tag:'Bulletin',
+        rec:[['Bulletin no.','14'],['Issued','5:00 PM today'],['Next bulletin','11:00 PM today'],
+             ['Signal No. 1',"this province, 6 others"],['Signal No. 2','none'],
+             ['Forecast','60% intensification in 24h'],['Prepared by','Weather Division, PAGASA']],
+        note:'Sections: track, wind field, rainfall outlook, marine warning. No section on schools or classes.' },
+      { t:'Bulletin #13, four hours earlier', tag:'Prior record',
+        rec:[['Bulletin no.','13'],['Issued','1:00 PM today'],['Signal No. 1','this province, 5 others'],
+             ['Forecast','55% intensification in 24h']],
+        note:'The province was already listed under Signal No. 1 four hours ago. The figures moved slightly and the numbering is unbroken.' }
+    ],
+    tell:'Numbered, timed, part of an unbroken sequence, and it says nothing about classes — because that is not its job.'
+  },
+  {
+    id:'tita', icon:'👵', name:'Tita Baby', rel:'Family · sincere', social:true,
+    kind:'misinfo', correct:'reject',
+    poster:'🚨 WALANG PASOK BUKAS!<small>ALL LEVELS · DEPED ADVISORY</small>',
+    fwd:'Forwarded many times', claim:'', extra:'Wag na kayo pumasok ha 🙏',
+    docs:[
+      { t:'The image file', tag:'File info',
+        rec:[['Dimensions','720 × 1280'],['Format','JPEG, quality 41'],['Est. re-saves','6+'],
+             ['EXIF data','none'],['Text layer','rendered over stock photo'],['Source URL','none']],
+        note:'Quality 41 with no EXIF means this file has been screenshotted and re-shared repeatedly. Nothing in it points anywhere.' },
+      { t:'How it reached her', tag:'Forward chain',
+        rec:[['Received from','"Barkada 2010 ❤️" (14 members)'],['Sent by','a former co-worker'],
+             ['Label','Forwarded many times'],['Original author','unknown']],
+        note:'She did not make it. She has not sent it anywhere else yet.' }
+    ],
+    tell:'Sincere sender, false content. The image carries no issuing office, no reference number and no link.'
+  },
+  {
+    id:'page', icon:'📢', name:'Walang Pasok Advisory', rel:'Page · 55,214 followers',
+    kind:'disinfo', correct:'reject',
+    claim:'<b>CONFIRMED:</b> No classes tomorrow, all levels, per DepEd advisory. Share to inform others!',
+    docs:[
+      { t:'Page transparency', tag:'Meta',
+        rec:[['Page created','2 November 2023'],['Previous name','"Francesca M 0fficial"'],
+             ['Renamed','28 July 2024'],['Followers','55,214'],['Category','Media/News Company'],
+             ['Verified','No'],['Admin locations','Philippines (2), Undisclosed (1)']],
+        note:'The page has carried its current name for less time than it carried the previous one.' },
+      { t:'Its last five posts', tag:'Post history',
+        rec:[['14 Aug','"CONFIRMED: no classes tomorrow"'],['9 Aug','"CONFIRMED: no classes tomorrow"'],
+             ['2 Aug','"CONFIRMED: walang pasok bukas"'],['28 Jul','"CONFIRMED: no classes"'],
+             ['21 Jul','"CONFIRMED: suspension all levels"']],
+        note:'Classes were held on 15 August, 10 August and 3 August.' }
+    ],
+    tell:'Disinformation. It posts the same claim every week regardless of the weather, and it renamed itself to look official.'
+  },
+  {
+    id:'rumor', icon:'💬', name:'Classmate of Kuya Jomar', rel:'Second-hand · unverifiable',
+    kind:'rumor', correct:'reject',
+    claim:'Sabi ni Papa ko, taga-city hall siya. May announcement daw mamaya. Wag na raw pumasok.',
+    docs:[
+      { t:'The message thread', tag:'Chat log',
+        rec:[['Claimed source','"my dad, he works at city hall"'],['Department','not stated'],
+             ['Heard it from','"a colleague"'],['Document','none'],['Screenshot','none'],['Time','8:41 PM']],
+        note:'Third-hand. There is nothing attached to this that you could show to another person.' }
+    ],
+    tell:'Unverifiable is not the same as false — it might even be true. But you cannot broadcast what you cannot show.'
+  },
+  {
+    id:'video', icon:'🎬', name:'Video of the Mayor', rel:'Re-upload · 22 seconds',
+    kind:'disinfo', correct:'reject',
+    claim:'A 22-second clip. The mayor, at a podium, announcing a suspension of classes for tomorrow.',
+    docs:[
+      { t:'Frame-by-frame', tag:'Media analysis',
+        rec:[['Duration','0:22'],['Resolution','480 × 854'],['0:04','mouth and audio aligned'],
+             ['0:11','mouth continues 0.3s after audio stops'],['0:18','earlobe edge flickers'],
+             ['Audio','no room tone, no crowd noise']],
+        note:'A podium speech recorded in a hall has room tone. This one has none.' },
+      { t:"Mayor's official page — today", tag:'Cross-check',
+        rec:[['Posts today','2'],['11:20 AM','flood control site inspection'],
+             ['3:05 PM','senior citizens\' benefit release'],['Any class suspension','none'],
+             ['This clip','not present'],['Upload type','re-upload, not a share']],
+        note:'If the mayor announced this, it is not on the mayor\'s page.' }
+    ],
+    tell:'Synthetic video. It is not on the official page, it was re-uploaded rather than shared, and it desyncs at 0:11.'
+  },
+  {
+    id:'brgy', icon:'🏛', name:'Brgy. Captain — San Roque', rel:'Official · verified page',
+    kind:'true-scoped', correct:'accept',
+    claim:'Suspension of classes in <b>Barangay San Roque</b>: elementary and junior high only. Senior high unaffected.',
+    docs:[
+      { t:'The memorandum', tag:'Official memo',
+        rec:[['Reference','2026-0814'],['Issued','7:12 PM today'],['Issuing office','Office of the Punong Barangay'],
+             ['Scope — area','Barangay San Roque only'],['Scope — levels','Elementary and Junior High'],
+             ['Senior High','not covered'],['Signed','Punong Barangay, with name and signature']],
+        note:'Every element the rulebook lists for a real advisory is present, and the scope is stated twice.' },
+      { t:'Page verification', tag:'Meta',
+        rec:[['Page created','12 March 2019'],['Previous names','none'],['Verified','Yes'],
+             ['Followers','4,180'],['Posting pattern','2–5 per week, routine barangay notices']],
+        note:'Eleven of your classmates live in or have younger siblings in San Roque.' }
+    ],
+    tell:'True, official, and narrower than a glance suggests. Passing it on with its scope intact helps; dropping it costs someone a wasted trip.'
+  },
+  {
+    id:'radio', icon:'🎙', name:'Radyo Natin — J. Ramos', rel:'Journalist · verified',
+    kind:'reliable', correct:'accept',
+    claim:'City hall confirms: <b>no suspension for senior high.</b> Elementary only, San Roque. Signal remains No. 1.',
+    docs:[
+      { t:'Reporter profile', tag:'Byline',
+        rec:[['Name','J. Ramos'],['Outlet','Radyo Natin (local AM)'],['Verified','Yes'],
+             ['Beat','City desk, 6 years'],['Corrections issued','3, all appended publicly']],
+        note:'A named person at a named outlet who has publicly corrected themselves before.' },
+      { t:'Broadcast log', tag:'Transcript',
+        rec:[['Aired','7:38 PM today'],['Spoke to','City Hall information officer (named)'],
+             ['Confirmed','no SHS suspension'],['Confirmed','elementary, San Roque only'],
+             ['Cross-referenced','PAGASA Bulletin #14']],
+        note:'This is the third independent source saying the same thing.' }
+    ],
+    tell:'Attributable to a person, corroborated by two other independent sources.'
+  }
+];
+
+
+/* ============================================================
+   LEVEL 2 — "ANG AYUDA"
+   Theme: cash aid and scholarship scams.
+   New skill: official domains, forged memos, and the fact that
+   real assistance never charges a processing fee.
+   ============================================================ */
+
+const RULEBOOK_AYUDA = [
+  { h:'Is this a real government programme?', li:[
+    'Official announcements live on a <b>.gov.ph</b> domain.',
+    '<b>dswd-ayuda-claim.net</b> is not the DSWD. Lookalike domains are the whole trick.',
+    'Real programmes publish written guidelines, not just a poster.'
+  ]},
+  { h:'Money is the tell', li:[
+    'Legitimate government aid and scholarships <b>never charge a processing fee</b>.',
+    'No real programme asks for a fee to "release" or "claim" your money.',
+    'If there is a fee, it is a scam. There is no second interpretation.'
+  ]},
+  { h:'Spotting a forged memo', li:[
+    'Real memos carry a <b>reference number</b> and a named signatory.',
+    'Check the letterhead against a memo you know is genuine.',
+    'A logo that looks soft or blurry has been copied off a screenshot.',
+    'If it is real, it will also exist on the agency\'s own site.'
+  ]},
+  { h:'Urgency is a weapon', li:[
+    '"Only today", "last 50 slots", "closing tonight" exist to stop you checking.',
+    'Real deadlines are published weeks ahead, in writing.',
+    'The more urgent a message feels, the more it is worth two minutes.'
+  ]}
+];
+
+const SOURCES_AYUDA = [
+  {
+    id:'ched', icon:'🎓', name:'CHED Advisory 2026-08', rel:'Official · commission on higher ed',
+    kind:'reliable', correct:'accept',
+    post:'CHED scholarship applications open 20 Aug – 15 Sep. No fees. ched.gov.ph',
+    claim:'Applications for the Tulong Dunong grant open <b>20 August to 15 September</b>. No application fee. Apply through ched.gov.ph.',
+    docs:[
+      { t:'The advisory', tag:'Official',
+        rec:[['Reference','CHED-A-2026-08'],['Issued','12 August 2026'],['Published at','ched.gov.ph/advisories'],
+             ['Application fee','None'],['Deadline','15 September 2026'],['Signed','Chairperson, with name']],
+        note:'Reference number, a .gov.ph address, a deadline four weeks out, and an explicit statement that there is no fee.' },
+      { t:'The application portal', tag:'Cross-check',
+        rec:[['URL','ched.gov.ph/scholarships'],['Certificate','valid, issued to CHED'],
+             ['Domain registered','2004'],['Asks for payment','No'],['Asks for ID','Yes, at submission only']],
+        note:'The domain has existed for over twenty years and the certificate matches the agency.' }
+    ],
+    tell:'Every marker of a real programme: reference number, .gov.ph, a deadline weeks away, and no fee.'
+  },
+  {
+    id:'ayudapage', icon:'💸', name:'DSWD Ayuda Update', rel:'Page · 88,000 followers',
+    kind:'disinfo', correct:'reject',
+    post:'CLAIM YOUR ₱5,000 AYUDA — link inside.',
+    claim:'🎉 <b>CLAIM YOUR ₱5,000 AYUDA!</b> Limited slots, closes tonight! Click the link and pay the ₱150 processing fee to release your claim.',
+    docs:[
+      { t:'Page transparency', tag:'Meta',
+        rec:[['Page created','9 June 2026'],['Previous name','"Jhonalyn Vlogs PH"'],['Renamed','21 July 2026'],
+             ['Followers','88,412'],['Verified','No'],['Admin locations','Undisclosed (3)']],
+        note:'Two months old, renamed three weeks ago, all administrators hidden.' },
+      { t:'The link', tag:'Domain',
+        rec:[['URL','dswd-ayuda-claim.net'],['Registered','24 days ago'],['Registrant','private, redacted'],
+             ['Certificate','issued to the registrar, not DSWD'],['Requests','name, birthdate, ID photo, ₱150']],
+        note:'Not a .gov.ph address. The page collects an ID photo and a payment before anything is "released".' }
+    ],
+    tell:'Disinformation with a business model. A fee to release aid is the definition of a scam, and the domain is 24 days old.'
+  },
+  {
+    id:'aira', icon:'💛', name:'Aira', rel:'Best friend · thrilled for you', social:true,
+    kind:'misinfo', correct:'reject',
+    post:'Free ₱5,000 ayuda, apply before tonight!',
+    fwd:'Forwarded many times',
+    claim:'BES!! Nakuha na daw ng ate ko!! 😭 Bilis, malapit na mag-close!! Ikaw na next!!',
+    extra:'She has already sent it to three other people.',
+    docs:[
+      { t:'What she actually knows', tag:'Chat log',
+        rec:[['Claimed proof','"nakuha na ng ate ko"'],['Screenshot of payout','none'],
+             ['Has she applied','not yet'],['Source','the same page'],['Paid the fee','not yet — asking you first']],
+        note:'She has no evidence and she is not lying. She is excited, and she is about to lose ₱150.' }
+    ],
+    social:{
+      tape:'SHE IS ABOUT TO PAY',
+      head:'You left Aira out.',
+      body:'She is going to send the ₱150 in about ten minutes. She thinks you are being negative.',
+      note:'Rejecting a post costs nothing. Telling a friend she is being scammed costs something — but she is the one person here you can actually stop.',
+      aLabel:'Message her before she pays',
+      bLabel:'Say nothing',
+      aNote:'You caught Aira in time. She did not pay, and she is the one who spotted the next fake page before you did.',
+      bNote:'Aira paid the ₱150. The link then asked for a photo of her school ID, and she sent that too.'
+    },
+    tell:'Misinformation. Sincere, urgent, and secondhand — the excitement is doing all the work that evidence should.'
+  },
+  {
+    id:'brgyaid', icon:'🏛', name:'Brgy. San Roque — Assistance', rel:'Official · verified page',
+    kind:'true-scoped', correct:'accept',
+    post:'San Roque residents: financial assistance, 22 Aug, barangay hall. No fee, bring barangay ID.',
+    claim:'Financial assistance for <b>Barangay San Roque residents only</b>. 22 August, barangay hall, 8AM. Bring barangay ID. No fee.',
+    docs:[
+      { t:'The memorandum', tag:'Official memo',
+        rec:[['Reference','SR-FA-2026-11'],['Issuing office','Office of the Punong Barangay'],
+             ['Scope','San Roque residents only'],['Fee','None'],['Requirement','Barangay ID'],
+             ['Signed','Punong Barangay, named']],
+        note:'Nine of your classmates are San Roque residents.' },
+      { t:'Page verification', tag:'Meta',
+        rec:[['Page created','12 March 2019'],['Previous names','none'],['Verified','Yes'],['Followers','4,180']],
+        note:'The same barangay page you checked during the storm.' }
+    ],
+    tell:'True, official, and narrow. Nine classmates qualify — dropping it costs them the money.'
+  },
+  {
+    id:'memo', icon:'📄', name:'"DepEd Memo" screenshot', rel:'Image · no link attached',
+    kind:'disinfo', correct:'reject',
+    post:'All SHS students to receive ₱3,000 allowance (DepEd memo).',
+    claim:'A photo of a memo on DepEd letterhead: <b>all senior high students to receive a ₱3,000 cash allowance</b>, claim through the attached form.',
+    docs:[
+      { t:'The document itself', tag:'Forgery check',
+        rec:[['Reference number','absent'],['Signatory','"The Management"'],['Date','absent'],
+             ['Letterhead font','does not match DepEd issuances'],['Logo','resampled, soft edges'],
+             ['Form link','Google Form, not deped.gov.ph']],
+        note:'Real memos are signed by a named official. "The Management" is not a person.' },
+      { t:'DepEd site search', tag:'Cross-check',
+        rec:[['Searched','deped.gov.ph/issuances'],['Matching memo','none'],
+             ['Any cash allowance memo','none in 2026'],['Latest issuance','uniform allowance guidelines, June']],
+        note:'If a memo is real, it exists on the agency\'s own site. This one does not.' }
+    ],
+    tell:'A forged document. No reference number, no named signatory, a resampled logo, and it does not exist on DepEd\'s site.'
+  },
+  {
+    id:'guidance', icon:'🏫', name:'Guidance Office', rel:'Official · school page',
+    kind:'reliable', correct:'accept',
+    post:'Guidance office is helping with CHED applications — Room 204, bring the listed documents.',
+    claim:'The guidance office will assist with CHED scholarship applications. <b>Room 204, 8AM–4PM</b>. Bring: Form 138, barangay certificate, parent ID.',
+    docs:[
+      { t:'The post', tag:'School page',
+        rec:[['Posted by','Guidance Office (verified school page)'],['Room','204'],
+             ['Requirements','Form 138, barangay cert, parent ID'],['Fee','None'],
+             ['Matches','CHED advisory deadline']],
+        note:'It lines up with the CHED advisory, and it turns a national announcement into something your classmates can act on this week.' }
+    ],
+    tell:'Reliable, local, actionable, and it corroborates the official advisory.'
+  }
+];
+
+/* ============================================================
+   LEVEL 3 — "ANG NAWAWALA"
+   Theme: recycled missing-person and neighbourhood panic posts.
+   New skill: reverse image search — provenance in TIME, not just
+   in source. The hardest level to reject correctly, because
+   every instinct says share it just in case.
+   ============================================================ */
+
+const RULEBOOK_NAWAWALA = [
+  { h:'Where did this image come from?', li:[
+    'A <b>reverse image search</b> shows when a photo first appeared online.',
+    'If it was first indexed years ago, it is not from this week.',
+    'A caption in another language is a strong sign it has travelled.',
+    'The photo can be completely real and the story still false.'
+  ]},
+  { h:'Has it already been resolved?', li:[
+    'Recycled appeals almost always have a <b>follow-up</b> — "found safe" — that nobody shares.',
+    'Search the name and the word "found" before passing it on.',
+    'Sharing a resolved case sends strangers to a family that has moved on.'
+  ]},
+  { h:'"Just in case" is not free', li:[
+    'A false alert costs attention that a real one needs.',
+    'Every recycled post makes the next genuine appeal less believable.',
+    'Sharing without checking is a decision, not a neutral act.'
+  ]},
+  { h:'Neighbourhood panic posts', li:[
+    'Crime rumours spread faster than any correction.',
+    'A real incident has a <b>blotter entry</b> at the barangay or the police station.',
+    'No blotter, no report, no names — treat it as a rumour, however frightening.'
+  ]}
+];
+
+const SOURCES_NAWAWALA = [
+  {
+    id:'pnp', icon:'🚔', name:'PNP Station Advisory', rel:'Official · case number issued',
+    kind:'reliable', correct:'accept',
+    post:'Missing: Lola Remedios Bautista, 78, last seen Purok 4, 14 Aug. Case 2026-0814-11.',
+    claim:'<b>Missing person:</b> Remedios Bautista, 78, last seen Purok 4 on 14 August wearing a blue duster. Contact the station. Case no. 2026-0814-11.',
+    docs:[
+      { t:'The advisory', tag:'Official',
+        rec:[['Case number','2026-0814-11'],['Filed','14 August 2026, 6:20 PM'],['Filed by','daughter, named'],
+             ['Station','city police station'],['Photo','supplied by family'],['Status','active']],
+        note:'A case number means somebody stood at a desk and filed this. It can be verified by phone.' },
+      { t:'Reverse image search', tag:'Provenance',
+        rec:[['First indexed','15 August 2026'],['Earliest source','the station\'s own page'],
+             ['Other appearances','2 local news reposts, same week'],['Foreign copies','none']],
+        note:'The photo appears nowhere before this week. It originates where it claims to.' }
+    ],
+    tell:'A real, active, local case — with a number you could ring and check.'
+  },
+  {
+    id:'viral', icon:'🧒', name:'"Please share — missing child"', rel:'Viral post · 21,000 shares',
+    kind:'misinfo', correct:'reject',
+    post:'Missing child, please share!!',
+    fwd:'Forwarded many times',
+    claim:'<b>PLEASE SHARE!!</b> This child was taken near the market. Her mother is desperate. One share could bring her home. 😭',
+    docs:[
+      { t:'Reverse image search', tag:'Provenance',
+        rec:[['First indexed','3 March 2019'],['Country of origin','Brazil'],
+             ['Original caption','Portuguese'],['Times reposted','1,400+ across 9 countries'],
+             ['Local market in photo','signage is not Filipino']],
+        note:'The photo is seven years old and has been recirculated in nine countries with a different story each time.' },
+      { t:'What happened next', tag:'Follow-up',
+        rec:[['Case status','resolved'],['Found','7 March 2019, four days later'],
+             ['Source','Brazilian local news + the mother\'s own post'],
+             ['Family statement','asked people to stop sharing, 2020, 2022, 2024']],
+        note:'The child was found safe seven years ago. Her family has asked three separate times for people to stop.' }
+    ],
+    tell:'Misinformation. A real photo, a real child, a real distress — from Brazil, in 2019, resolved four days later.'
+  },
+  {
+    id:'watch', icon:'👁', name:'Barangay Watch PH', rel:'Page · 132,000 followers',
+    kind:'disinfo', correct:'reject',
+    post:'Kidnapping syndicate active in our area — share to warn everyone!',
+    claim:'⚠️ <b>KIDNAPPING SYNDICATE ACTIVE IN OUR AREA.</b> White van seen circling. Share to warn everyone!! 🙏',
+    docs:[
+      { t:'Its last six posts', tag:'Post history',
+        rec:[['13 Aug','"white van syndicate — share!"'],['6 Aug','"white van syndicate — share!"'],
+             ['30 Jul','"organ harvesting — share!"'],['22 Jul','"white van — share!"'],
+             ['15 Jul','"kidnapping ring — share!"'],['Named location, ever','no']],
+        note:'The same warning, every week, never naming a street, a date, or a station.' },
+      { t:'Police blotter check', tag:'Cross-check',
+        rec:[['Reports of abduction attempts','0 in the last 90 days'],
+             ['White van reports','0'],['Station statement','"no basis, please stop sharing"'],
+             ['Page ever corrected itself','no']],
+        note:'The station has publicly asked this page to stop. It has not.' }
+    ],
+    tell:'Disinformation farming fear. It posts the same warning weekly, never names anything checkable, and ignores the station\'s correction.'
+  },
+  {
+    id:'tita2', icon:'👵', name:'Tita Baby', rel:'Family · sincere', social:true,
+    kind:'misinfo', correct:'reject',
+    post:'Missing child — share daw.',
+    fwd:'Forwarded many times',
+    claim:'Anak, i-share mo daw ito. Baka matulungan natin. 🙏😭',
+    extra:'It is the Brazil photo again.',
+    docs:[
+      { t:'How it reached her', tag:'Forward chain',
+        rec:[['Received from','"Prayer Warriors 🙏" (212 members)'],['Label','Forwarded many times'],
+             ['She has shared it','not yet'],['She shared the storm post','yes, last time'],
+             ['Her question to you','"totoo ba ito?"']],
+        note:'She asked you first this time. That is new.' }
+    ],
+    social:{
+      tape:'SHE ASKED YOU FIRST',
+      head:'Tita Baby is waiting for an answer.',
+      body:'Last storm she forwarded without asking. This time she asked you first — because you told her privately instead of correcting her in front of everyone.',
+      note:'This is what the trust was for. Spend it.',
+      aLabel:'Explain how you checked it',
+      bLabel:'Just tell her not to share',
+      aNote:'You showed Tita Baby the reverse image search. She now checks photos herself, and she caught the next one before you did.',
+      bNote:'Tita Baby did not share it. She also still does not know how you knew, so she will have to ask you again next time.'
+    },
+    tell:'The same photo, arriving through someone who loves you — but this time she asked before sharing.'
+  },
+  {
+    id:'blotter', icon:'📓', name:'Brgy. blotter — 15 Aug', rel:'Official · public record',
+    kind:'true-scoped', correct:'accept',
+    post:'Confirmed: one snatching incident on Rizal St, 15 Aug, 9PM. Suspect held.',
+    claim:'Blotter entry: one <b>snatching incident</b>, Rizal Street, 15 August, 9:10PM. Phone taken. Suspect apprehended same night.',
+    docs:[
+      { t:'The blotter entry', tag:'Public record',
+        rec:[['Entry no.','2026-08-15-04'],['Incident','snatching (phone)'],['Location','Rizal St corner Mabini'],
+             ['Time','9:10 PM'],['Suspect','apprehended, in custody'],['Abduction','none reported']],
+        note:'A real incident, correctly described, already resolved — and much smaller than the panic post claims.' }
+    ],
+    tell:'True and narrow. One snatching, suspect caught. Sharing the real record is what deflates the syndicate rumour.'
+  },
+  {
+    id:'news', icon:'📰', name:'Radyo Natin — J. Ramos', rel:'Journalist · verified',
+    kind:'reliable', correct:'accept',
+    post:'Police confirm no abduction reports; the viral child photo is from Brazil, 2019.',
+    claim:'Police confirm <b>no abduction reports</b> in the last 90 days. The viral child photo has been traced to Brazil, 2019 — the child was found that year.',
+    docs:[
+      { t:'Broadcast log', tag:'Transcript',
+        rec:[['Aired','16 August, 7:05 AM'],['Spoke to','station commander, named'],
+             ['Verified photo origin','yes, independently'],['Named the page','yes, Barangay Watch PH'],
+             ['Correction offered to page','declined']],
+        note:'The same reporter you checked during the storm. He did the reverse image search too.' }
+    ],
+    tell:'Attributable, corroborated, and it does the work of correcting the rumour for you.'
+  }
+];
+
+/* ============================================================
+   LEVEL REGISTRY
+   Each level is a self-contained unit: its own sources, its own
+   rulebook chapters, its own consequences. Adding a fourth level
+   means adding an object here — no code changes anywhere.
+   ============================================================ */
+
+const LEVELS = [
+  {
+    id:'suspension', n:1,
+    title:'Walang pasok',
+    sub:'Class suspensions',
+    skill:'Who is allowed to declare it',
+    hud:'GRADE 11 · SECTION CHAT',
+    topic:'BAGYONG DANTE',
+    audience:42,
+    blurb:'A storm is coming and everyone wants to know if there are classes tomorrow.',
+    rulebook: RULEBOOK,
+    sources:  SOURCES,
+    falseClaim:['tita','page','rumor','video'],
+    outcomes:{
+      lied:  '<b>38 of 42 stayed home.</b> Classes ran normally. There was a periodical exam.',
+      quiet: '<b>Your section went to school — but you posted almost nothing.</b> They found out from someone else, and next time they will ask someone else first.',
+      clean: '<b>All 42 attended.</b> Classes ran normally. Nobody missed the exam.'
+    },
+    extras:[
+      { when:S=>S.decided['brgy']!=='accept', tone:'pk',
+        text:'Eleven classmates have younger siblings in San Roque. Their elementary classes <b>were</b> suspended, and you had that memo in your hands. Three of them walked to a closed school.' }
+    ]
+  },
+  {
+    id:'ayuda', n:2,
+    title:'Ang ayuda',
+    sub:'Aid and scholarship scams',
+    skill:'Official domains, forged memos, and the fee that gives it away',
+    hud:'GRADE 11 · SECTION CHAT',
+    topic:'SCHOLARSHIP SEASON',
+    audience:42,
+    blurb:'Enrolment is close and money is tight. Everyone is looking for help paying for it.',
+    rulebook: RULEBOOK_AYUDA,
+    sources:  SOURCES_AYUDA,
+    falseClaim:['ayudapage','aira','memo'],
+    outcomes:{
+      lied:  '<b>Nineteen classmates paid the ₱150 "processing fee".</b> Seven of them also uploaded a photo of their school ID. Nobody received any money.',
+      quiet: '<b>Nobody got scammed — and nobody applied either.</b> The CHED deadline passed on the 15th. Four classmates who would have qualified missed it entirely.',
+      clean: '<b>Eleven classmates applied before the deadline.</b> Nobody paid a fee to anyone.'
+    },
+    extras:[
+      { when:S=>S.decided['brgyaid']!=='accept', tone:'pk',
+        text:'Nine of your classmates are San Roque residents and the barangay assistance had no fee and no catch. You had the memo. They did not go.' },
+      { when:S=>S.decided['guidance']!=='accept', tone:'yl',
+        text:'The guidance office sat in Room 204 all week with the forms ready. Two people came.' }
+    ]
+  },
+  {
+    id:'nawawala', n:3,
+    title:'Ang nawawala',
+    sub:'Recycled appeals and panic posts',
+    skill:'Reverse image search — where a photo came from, and when',
+    hud:'GRADE 11 · SECTION CHAT',
+    topic:'IT IS EVERYWHERE TODAY',
+    audience:42,
+    blurb:'A missing child post is on every feed in the city this morning, and people are frightened.',
+    rulebook: RULEBOOK_NAWAWALA,
+    sources:  SOURCES_NAWAWALA,
+    falseClaim:['viral','watch','tita2'],
+    outcomes:{
+      lied:  '<b>Your section shared it 200 times.</b> The child was found in Brazil in 2019. Her family received nineteen messages from the Philippines this week asking if she is safe.',
+      quiet: '<b>You posted nothing, so nothing spread — including the real one.</b> Lola Remedios was missing for two more days. She was found on the 17th, cold but alive.',
+      clean: '<b>The recycled post died in your chat.</b> And forty-two people saw Lola Remedios\'s face, with a case number, on the morning she was still missing.'
+    },
+    extras:[
+      { when:S=>S.decided['pnp']!=='accept', tone:'pk',
+        text:'You had an active case with a number and a photo, for a 78-year-old woman two puroks away, and you did not pass it on.' },
+      { when:S=>S.decided['blotter']!=='accept', tone:'yl',
+        text:'The blotter said one snatching, suspect caught. Without it, the syndicate rumour stayed the only version anyone had.' }
+    ]
+  }
+];
+
+const SAVE_KEY = 'saangaling.v2';
+
+let S, L;                       // S = run state, L = current level
+const $ = id => document.getElementById(id);
+const docsIn = lvl => lvl.sources.reduce((n,s)=>n+s.docs.length,0);
+
+function buzz(p){ if (navigator.vibrate) { try{ navigator.vibrate(p); }catch(e){} } }
+
+/* ---------- persistence: a phone will background this mid-round ---------- */
+function save(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify({s:S, screen:CURRENT, lvl:L?L.id:null, done:DONE})); }catch(e){}
+}
+function load(){
+  try{ const d=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); return (d&&d.s)?d:null; }catch(e){ return null; }
+}
+let DONE = {};                  // levelId -> best score
+
+function newRun(level){
+  L = level;
+  S = { i:0, cred:CONFIG.credStart, decided:{}, opened:{}, snap:[], social:null };
+  go('brief');
+}
+
+/* ---------- chrome ---------- */
+function pips(){
+  $('pips').innerHTML = Array.from({length:CONFIG.credMax},
+    (_,i)=>`<span class="pip ${S&&i<S.cred?'':'off'}"></span>`).join('');
+}
+function track(active){
+  if (!L){ $('track').innerHTML=''; return; }
+  $('track').innerHTML = L.sources.map((_,i)=>{
+    const c = i<S.i ? 'done' : (i===S.i && active ? 'now' : '');
+    return `<i class="${c}"></i>`;
+  }).join('');
+}
+function hud(l, sl, active){
+  $('hud-l').textContent = l; $('sub-l').textContent = sl;
+  pips(); track(active);
+  $('rulebtn').style.display = L ? '' : 'none';
+}
+function view(h){ $('view').innerHTML=h; $('view').scrollTop=0; }
+function foot(...els){ const f=$('foot'); f.innerHTML=''; els.filter(Boolean).forEach(e=>f.appendChild(e)); }
+function button(label, fn, cls, dis){
+  const b=document.createElement('button');
+  b.className='btn '+(cls||''); b.innerHTML=label; b.disabled=!!dis;
+  b.onclick=()=>{ buzz(12); fn(); };
+  return b;
+}
+function row(a,b){ const d=document.createElement('div'); d.className='btnrow'; d.append(a,b); return d; }
+function docsRead(){ return Object.values(S.opened).reduce((n,a)=>n+a.length,0); }
+
+/* ---------- sheets ---------- */
+function openSheet(tag,title,html){
+  $('sheet-tag').textContent=tag; $('sheet-title').textContent=title;
+  $('sheet-body').innerHTML=html; $('sheet-body').scrollTop=0;
+  $('sheet').hidden=false; buzz(10);
+}
+function closeSheet(){ $('sheet').hidden=true; }
+$('sheet-close').onclick=closeSheet;
+$('sheet').onclick=e=>{ if(e.target===$('sheet')) closeSheet(); };
+$('rulebtn').onclick=()=>{
+  if(!L) return;
+  openSheet('Reference','Rulebook',
+    L.rulebook.map(s=>`<div class="rulesec"><h3>${s.h}</h3><ul>${s.li.map(l=>`<li>${l}</li>`).join('')}</ul></div>`).join(''));
+};
+window.addEventListener('popstate',()=>{ if(!$('sheet').hidden) closeSheet(); history.pushState(null,''); });
+history.pushState(null,'');
+
+function showDoc(d){
+  openSheet(d.tag,d.t,
+    `<div class="rec">${d.rec.map(([k,v])=>`<div><span>${k}</span><span>${v}</span></div>`).join('')}</div>
+     ${d.note?`<p class="note">${d.note}</p>`:''}`);
+}
+function stamp(k){
+  const el=document.createElement('div');
+  el.className='stamp '+(k==='accept'?'ok':'no');
+  el.textContent = k==='accept'?'Accepted':'Rejected';
+  $('stage').appendChild(el); setTimeout(()=>el.remove(),620);
+}
+
+/* ---------------- screens ---------------- */
+let CURRENT='menu';
+
+const SCREENS = {
+
+  menu(){
+    L=null;
+    hud('SAAN GALING?','WHERE\'S IT FROM? · SELECT A LEVEL', false);
+    view(`
+      <span class="tape">3 LEVELS</span>
+      <h1>Same job.<br>Different lies.</h1>
+      <p class="sm">You run the section group chat. Every level brings a new kind of claim — and a new chapter in the rulebook.</p>
+      <div id="lvls" style="margin-top:4px"></div>`);
+    const box=$('lvls');
+    LEVELS.forEach(lv=>{
+      const best = DONE[lv.id];
+      const b=document.createElement('button');
+      b.className='btn lvl '+(best?'cy':'');
+      b.innerHTML = `<span class="lvl-n">${lv.n}</span>
+        <span class="lvl-t"><b>${lv.title}</b><i>${lv.sub}</i></span>
+        <span class="lvl-s">${best ? '★ '+best.correct+'/'+best.total : ''}</span>`;
+      b.onclick=()=>{ buzz(12); newRun(lv); };
+      box.appendChild(b);
+    });
+    foot(button('How this works', ()=>openSheet('About','Saan Galing?',
+      `<p class="note" style="border:none;padding:0">Every claim that reaches you carries documents. Reading them is free and unlimited — the rulebook is too.</p>
+       <div class="rulesec"><h3>Two ways to fail</h3><ul>
+       <li>Let a lie through and your section acts on it.</li>
+       <li>Hold back something true and they act on nothing.</li>
+       <li>Both are on the scoreboard.</li></ul></div>`)));
+  },
+
+  brief(){
+    hud(L.hud, L.topic+' · BRIEF', false);
+    view(`
+      <span class="tape">LEVEL ${L.n}</span>
+      <h1>${L.title}</h1>
+      <p class="sm">${L.blurb} ${L.audience} classmates read what you post.</p>
+      <div class="nb yl">
+        <h3>This level teaches</h3>
+        <p class="sm" style="margin:0">${L.skill}</p>
+      </div>
+      <div class="nb cy">
+        <p class="sm" style="margin:0"><b>${L.sources.length} sources, ${docsIn(L)} documents.</b> Open every one if you want — checking is free. The rulebook is up there, and it has new pages for this level.</p>
+      </div>
+      <div class="nb pk">
+        <p class="sm" style="margin:0">Letting a lie through costs you. So does holding back something true.</p>
+      </div>`);
+    foot(button('Start the shift', ()=>go('source'), 'cy'),
+         button('Back', ()=>go('menu')));
+  },
+
+  source(){
+    const s=L.sources[S.i];
+    hud(`SOURCE ${S.i+1} / ${L.sources.length}`, L.topic+' · INCOMING', true);
+    const opened=S.opened[s.id]||[];
+    const body = s.poster
+      ? `<div class="claim"><span class="fwd">${s.fwd}</span><div class="poster">${s.poster}</div>${s.extra?`<p class="sm" style="margin:10px 0 0">${s.extra}</p>`:''}</div>`
+      : `<div class="claim">${s.fwd?`<span class="fwd">${s.fwd}</span>`:''}${s.claim}${s.extra?`<p class="sm" style="margin:10px 0 0"><i>${s.extra}</i></p>`:''}</div>`;
+    view(`
+      <div class="who"><div class="pfp">${s.icon}</div>
+        <div><div class="nm">${s.name}</div><div class="rel">${s.rel}</div></div></div>
+      ${body}
+      <div class="tray">
+        <div class="trayhd"><span>Attached</span><span>${opened.length} / ${s.docs.length} read</span></div>
+        <div class="traybody" id="docs"></div>
+      </div>`);
+    const box=$('docs');
+    s.docs.forEach((d,idx)=>{
+      const isOpen=opened.includes(idx);
+      const b=document.createElement('button');
+      b.className='doc'+(isOpen?' open':'');
+      b.innerHTML=`<span>📄 ${d.t}</span><span class="cost">${isOpen?'✓ Read':'Open'}</span>`;
+      b.onclick=()=>{ if(!isOpen){ (S.opened[s.id]=S.opened[s.id]||[]).push(idx); save(); go('source'); } showDoc(d); };
+      box.appendChild(b);
+    });
+    foot(row(button('Reject',()=>decide('reject'),'pk'),
+             button('Accept',()=>decide('accept'),'cy')));
+  },
+
+  social(){
+    const s=L.sources[S.i], c=s.social;
+    hud(`SOURCE ${S.i+1} / ${L.sources.length}`,'ONE MORE THING', true);
+    view(`
+      <span class="tape pk r">${c.tape}</span>
+      <h2>${c.head}</h2>
+      <p class="sm">${c.body}</p>
+      <div class="nb"><p class="sm" style="margin:0">${c.note}</p></div>`);
+    foot(button(c.aLabel, ()=>{ S.social='a'; next(); }, 'cy'),
+         button(c.bLabel, ()=>{ S.social='b'; next(); }));
+  },
+
+  compose(){
+    const acc=L.sources.filter(s=>S.decided[s.id]==='accept');
+    const bad=acc.some(s=>L.falseClaim.includes(s.id));
+    hud('COMPOSE','POSTING NOW', false);
+    view(`
+      <span class="tape cy">YOUR POST</span>
+      <h2>${L.audience} people will read this.</h2>
+      <div class="nb ${bad?'pk':'yl'}">
+        <p class="sm" style="margin:0">${acc.length===0?'<b>(You are posting nothing.)</b>'
+          :acc.map(s=>'• '+s.post).join('<br>')}</p></div>
+      <span class="lbl" style="display:block;margin-top:14px">Sources used: ${acc.length} of ${L.sources.length} · Documents read: ${docsRead()} of ${docsIn(L)}</span>`);
+    foot(button('Post it',()=>go('results'),'cy'));
+  },
+
+  results(){
+    const r=tally();
+    DONE[L.id] = { correct:r.correct, total:L.sources.length };
+    hud('RESULTS','MORNING AFTER', false);
+    buzz(r.good?[25,60,25]:[90]);
+    const nextLv = LEVELS[LEVELS.indexOf(L)+1];
+    view(`
+      <div class="verdictbar ${r.good?'nb cy':'nb pk'}">${r.headline}</div>
+      <div class="nb" style="margin-top:13px">
+        <div class="score"><span>Correct calls</span><b>${r.correct} / ${L.sources.length}</b></div>
+        <div class="score ${r.misinfo?'bad':''}"><span>Misinformation let through</span><b>${r.misinfo}</b></div>
+        <div class="score ${r.disinfo?'bad':''}"><span>Disinformation let through</span><b>${r.disinfo}</b></div>
+        <div class="score ${r.withheld?'bad':''}"><span>True info withheld</span><b>${r.withheld}</b></div>
+        <div class="score"><span>Documents read</span><b>${r.read} / ${docsIn(L)}</b></div>
+        <div class="score"><span>Section trusts you</span><b>${r.cred} / ${CONFIG.credMax}</b></div>
+      </div>
+      ${r.notes.map(n=>`<div class="nb ${n.t}" style="margin-top:11px"><p class="sm" style="margin:0">${n.x}</p></div>`).join('')}
+      ${r.missed.length?`<div style="margin-top:15px"><span class="lbl">What the documents said</span>
+        ${r.missed.map(m=>`<div class="debrief"><b>${m.name}</b>${m.tell}</div>`).join('')}</div>`:''}
+      <div class="nb bk" style="margin-top:13px"><p class="sm" style="margin:0">
+        <b>Letting a lie through and holding back the truth are both failures.</b> Only one of them gets taught.</p></div>`);
+    foot(nextLv ? button(`Level ${nextLv.n} — ${nextLv.title}`, ()=>newRun(nextLv), 'cy') : null,
+         button('Level select', ()=>go('menu')));
+  }
+};
+
+function decide(what){
+  const s=L.sources[S.i];
+  S.decided[s.id]=what;
+  if(!(S.opened[s.id]||[]).length) S.snap.push(s.name);
+  stamp(what); buzz(what==='accept'?[18,45,18]:55);
+  if(what==='accept' && s.correct==='accept') S.cred=Math.min(CONFIG.credMax,S.cred+1);
+  if(what==='accept' && s.correct==='reject') S.cred=Math.max(0,S.cred-1);
+  save();
+  setTimeout(()=>{ if(s.social && what==='reject' && !S.social) return go('social'); next(); },480);
+}
+function next(){ S.i++; if(S.i>=L.sources.length) go('compose'); else go('source'); }
+
+function tally(){
+  let correct=0,misinfo=0,disinfo=0,withheld=0; const missed=[];
+  L.sources.forEach(s=>{
+    const d=S.decided[s.id];
+    if(d===s.correct) correct++; else missed.push({name:s.name,tell:s.tell});
+    if(d==='accept'&&s.kind==='misinfo') misinfo++;
+    if(d==='accept'&&s.kind==='disinfo') disinfo++;
+    if(d==='reject'&&(s.kind==='reliable'||s.kind==='true-scoped')) withheld++;
+  });
+  const lied=L.sources.some(s=>S.decided[s.id]==='accept'&&L.falseClaim.includes(s.id));
+  const notes=[];
+  if(lied)            notes.push({t:'pk',x:L.outcomes.lied});
+  else if(withheld>=2)notes.push({t:'yl',x:L.outcomes.quiet});
+  else                notes.push({t:'cy',x:L.outcomes.clean});
+
+  (L.extras||[]).forEach(e=>{ if(e.when(S)) notes.push({t:e.tone,x:e.text}); });
+
+  const soc=L.sources.find(s=>s.social);
+  if(soc && S.social){
+    const c=soc.social;
+    if(S.social==='a'){ notes.push({t:'cy',x:c.aNote}); S.cred=Math.min(CONFIG.credMax,S.cred+1); }
+    else               notes.push({t:'yl',x:c.bNote});
+  }
+  const total=docsIn(L);
+  if(S.snap.length) notes.push({t:'yl',x:`You judged <b>${S.snap.length} source${S.snap.length>1?'s':''}</b> without opening a single document — ${S.snap.join(', ')}. You may have been right. You were not checking.`});
+  else if(docsRead()===total) notes.push({t:'cy',x:`<b>You read all ${total} documents.</b> That is the habit. It is free, it was always free, and almost nobody does it.`});
+
+  return { correct,misinfo,disinfo,withheld,cred:S.cred,notes,missed,read:docsRead(),
+    good: !lied && withheld===0,
+    headline: lied ? 'You passed on a lie'
+            : withheld>=2 ? 'You kept them safe by telling them nothing'
+            : 'You got it right' };
+}
+
+function go(n){ CURRENT=n; SCREENS[n](); save(); }
+
+(function boot(){
+  const d=load();
+  if(d){
+    DONE = d.done || {};
+    const lv = LEVELS.find(x=>x.id===d.lvl);
+    if(lv && d.screen && SCREENS[d.screen] && d.screen!=='menu'){
+      L=lv; S=d.s; if(!S.snap) S.snap=[];
+      return go(d.screen);
+    }
+  }
+  go('menu');
+})();
+
+
+</script>
+</body>
+</html>

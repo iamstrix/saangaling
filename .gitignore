@@ -1,0 +1,18 @@
+# Android build output and dependencies
+android-app/node_modules/
+android-app/android/build/
+android-app/android/app/build/
+android-app/android/.gradle/
+android-app/android/local.properties
+android-app/android/capacitor-cordova-android-plugins/
+
+# Working material, not for publication
+a.txt
+image.png
+image copy*.png
+screenshots/
+walang-pasok.html
+video-script.md
+index.html
+DESIGN.md
+site/
