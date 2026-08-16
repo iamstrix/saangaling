@@ -1,7 +1,7 @@
 # Saan Galing? — "Where's it from?"
 
-A media and information literacy game for the **UNESCO Youth Hackathon 2026**
-("Play Your Part: Youth Designing the Future of Media and Information Literacy").
+A media and information literacy game about the decision that actually spreads
+misinformation: whether to pass something on.
 
 **▶ Play it: https://iamstrix.github.io/saangaling/**
 
@@ -16,6 +16,10 @@ checked against a rulebook.
 does holding back something true, because refusing to believe anything is its
 own failure, and it is the one media literacy education produces by accident.
 
+Built around a problem that recurs every typhoon season in the Philippines:
+fake class suspension announcements, now increasingly AI-generated, that keep
+students home from school days that were never cancelled.
+
 ## Three levels, three skills
 
 | Level | Theme | Skill |
@@ -27,15 +31,15 @@ own failure, and it is the one media literacy education produces by accident.
 Levels are data, not code. Adding a fourth is adding a data object; translating
 the game is a translation task, not a development one.
 
+Designed to fit the mandated senior high Media and Information Literacy subject
+— one semester, 80 hours — so it needs no new space in the timetable.
+
 ## Repository
 
 | Path | What |
 |---|---|
 | `docs/` | The published site (GitHub Pages) |
 | `docs/play.html` | The game — one HTML file, no dependencies, no backend, runs offline |
-| `gatekeeper.html` | Source of the game (same file, kept at root for editing) |
-| `proposal.html` | Written proposal |
-| `Saan-Galing-Proposal.pdf` | The submitted PDF |
 | `android-app/` | Capacitor wrapper for the Android build |
 
 ## Team
